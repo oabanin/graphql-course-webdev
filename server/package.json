@@ -11,7 +11,7 @@
 
     "dev2": "./node_modules/.bin/nodemon app.ts"
   },
-  "author": "",
+  "author": ""
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
