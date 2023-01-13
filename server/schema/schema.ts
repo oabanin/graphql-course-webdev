@@ -2,6 +2,9 @@ const graphql = require('graphql');
 
 const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt, GraphQLList} = graphql;
 
+const Movies = require("../models/movie");
+const Directors = require('../models/director');
+
 interface TMovie {
     id: string | number;
     name: string;
@@ -42,6 +45,7 @@ const MovieType = new GraphQLObjectType({
         "genre": {type: GraphQLString},
         director: {
             type: DirectorType, resolve(parent: TMovie) {
+                //return Directors.findById(parent.directorId);
                 // return directors.find(director => director.id == parent.id)
             }
         }
@@ -54,7 +58,13 @@ const DirectorType = new GraphQLObjectType({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
         age: {type: GraphQLInt},
-    })
+    }),
+    movies:{
+        type: new GraphQLList(MovieType),
+        resolve(parent: TDirector){
+            //return Movies.find({directorId: parent.id})
+        }
+    }
 })
 
 const schema = new GraphQLSchema({
@@ -64,25 +74,29 @@ const schema = new GraphQLSchema({
             movie: {
                 type: MovieType,
                 args: {id: {type: GraphQLID}},
-                resolve(parent: any, args: { id: string }) {
+                resolve(parent: TMovie, args: { id: string }) {
                     // return movies.find(movie => movie.id == args.id)
+                    //return Movies.findById(args.id);
                 }
             },
             director: {
                 type: DirectorType,
                 args: {id: {type: GraphQLID}},
-                resolve(parent: any, args: { id: string }) {
+                resolve(parent: TMovie, args: { id: string }) {
                     // return directors.find(director => director.id == args.id)
+                    //return Movies.findById(args.id);
                 }
             },
             movies: {
                 type: new GraphQLList(MovieType), resolve() {
                     // return movies;
+                    //return Movies.find({})
                 }
             },
             directors: {
                 type: new GraphQLList(DirectorType), resolve() {
                     // return directors;
+                    //return Directors.find({})
                 }
             }
         },
