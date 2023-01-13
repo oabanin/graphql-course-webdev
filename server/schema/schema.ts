@@ -5,8 +5,8 @@ const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt, G
 interface TMovie {
     id: string | number;
     name: string;
-    genre: string;
-    directorId: string | number;
+    "genre": string;
+    "directorId": string | number;
 }
 
 interface TDirector {
@@ -15,23 +15,23 @@ interface TDirector {
     age: number;
 }
 
-const movies = [
-    {id: '1', name: "Film1", genre: "Porn", directorId: 3},
-    {id: '2', name: "Film2", genre: "Comedy", directorId: 2},
-    {id: 3, name: "Film3", genre: "Thriller", directorId: 1},
-    {id: 4, name: "Film4", genre: "History", directorId: 4},
-    {id: '5', name: "Film5", genre: "Porn", directorId: 3},
-    {id: '6', name: "Film6", genre: "Porn", directorId: 3},
-    {id: 7, name: "Film7", genre: "History", directorId: 2},
-    {id: 8, name: "Film7", genre: "History", directorId: 1},
-]
+// const movies = [
+//     { "name": "Film1", "genre": "Porn", "directorId": "63c089a030bb27bdf02b80e5"},
+//     { "name": "Film2", "genre": "Comedy", "directorId": "63c089a030bb27bdf02b80e6"},
+//     { "name": "Film3", "genre": "Thriller", "directorId": "63c089a030bb27bdf02b80e7"},
+//     { "name": "Film4", "genre": "History", "directorId": "63c089a030bb27bdf02b80e8"},
+//     { "name": "Film5", "genre": "Porn", "directorId": "63c089a030bb27bdf02b80e5"},
+//     { "name": "Film6", "genre": "Porn", "directorId": "63c089a030bb27bdf02b80e5"},
+//     { "name": "Film7", "genre": "History", "directorId": "63c089a030bb27bdf02b80e6"},
+//     { "name": "Film7", "genre": "History", "directorId": "63c089a030bb27bdf02b80e8"},
+// ]
 
-const directors = [
-    {id: '1', name: "Quentin Tarantion", age: 55},
-    {id: '2', name: "Michel", age: 44},
-    {id: 3, name: "Lara", age: 33},
-    {id: 4, name: "Bengamon", age: 22}
-]
+// const directors = [
+//     { "name": "Quentin Tarantion", age: 55}, //63c089a030bb27bdf02b80e5
+//     { "name": "Michel", age: 44}, //63c089a030bb27bdf02b80e6
+//     { "name": "Lara", age: 33}, //63c089a030bb27bdf02b80e7
+//     { "name": "Bengamon", age: 22} //63c089a030bb27bdf02b80e8
+// ]
 
 
 const MovieType = new GraphQLObjectType({
@@ -39,10 +39,10 @@ const MovieType = new GraphQLObjectType({
     fields: () => ({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
-        genre: {type: GraphQLString},
+        "genre": {type: GraphQLString},
         director: {
             type: DirectorType, resolve(parent: TMovie) {
-                return directors.find(director => director.id == parent.id)
+                // return directors.find(director => director.id == parent.id)
             }
         }
     })
@@ -65,24 +65,24 @@ const schema = new GraphQLSchema({
                 type: MovieType,
                 args: {id: {type: GraphQLID}},
                 resolve(parent: any, args: { id: string }) {
-                    return movies.find(movie => movie.id == args.id)
+                    // return movies.find(movie => movie.id == args.id)
                 }
             },
             director: {
                 type: DirectorType,
                 args: {id: {type: GraphQLID}},
                 resolve(parent: any, args: { id: string }) {
-                    return directors.find(director => director.id == args.id)
+                    // return directors.find(director => director.id == args.id)
                 }
             },
             movies: {
                 type: new GraphQLList(MovieType), resolve() {
-                    return movies;
+                    // return movies;
                 }
             },
             directors: {
                 type: new GraphQLList(DirectorType), resolve() {
-                    return directors;
+                    // return directors;
                 }
             }
         },
