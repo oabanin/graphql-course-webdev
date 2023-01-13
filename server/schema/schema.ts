@@ -1,9 +1,16 @@
-const graphql = require('graphql');
+import {
+    GraphQLObjectType,
+    GraphQLString,
+    GraphQLSchema,
+    GraphQLID,
+    GraphQLInt,
+    GraphQLList,
+} from 'graphql'
 
-const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt, GraphQLList} = graphql;
 
-const Movies = require("../models/movie");
-const Directors = require('../models/director');
+import Directors from "../models/director";
+import Movies from "../models/movie";
+
 
 interface TMovie {
     id: string | number;
@@ -18,53 +25,36 @@ interface TDirector {
     age: number;
 }
 
-// const movies = [
-//     { "name": "Film1", "genre": "Porn", "directorId": "63c089a030bb27bdf02b80e5"},
-//     { "name": "Film2", "genre": "Comedy", "directorId": "63c089a030bb27bdf02b80e6"},
-//     { "name": "Film3", "genre": "Thriller", "directorId": "63c089a030bb27bdf02b80e7"},
-//     { "name": "Film4", "genre": "History", "directorId": "63c089a030bb27bdf02b80e8"},
-//     { "name": "Film5", "genre": "Porn", "directorId": "63c089a030bb27bdf02b80e5"},
-//     { "name": "Film6", "genre": "Porn", "directorId": "63c089a030bb27bdf02b80e5"},
-//     { "name": "Film7", "genre": "History", "directorId": "63c089a030bb27bdf02b80e6"},
-//     { "name": "Film7", "genre": "History", "directorId": "63c089a030bb27bdf02b80e8"},
-// ]
-
-// const directors = [
-//     { "name": "Quentin Tarantion", age: 55}, //63c089a030bb27bdf02b80e5
-//     { "name": "Michel", age: 44}, //63c089a030bb27bdf02b80e6
-//     { "name": "Lara", age: 33}, //63c089a030bb27bdf02b80e7
-//     { "name": "Bengamon", age: 22} //63c089a030bb27bdf02b80e8
-// ]
-
 
 const MovieType = new GraphQLObjectType({
     name: "TMovie",
     fields: () => ({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
-        "genre": {type: GraphQLString},
+        genre: {type: GraphQLString},
         director: {
-            type: DirectorType, resolve(parent: TMovie) {
-                //return Directors.findById(parent.directorId);
-                // return directors.find(director => director.id == parent.id)
+            type: DirectorType,
+            resolve(parent: TMovie) {
+                return Directors.findById(parent.directorId);
             }
         }
     })
 })
 
-const DirectorType = new GraphQLObjectType({
+const DirectorType: GraphQLObjectType<TDirector> = new GraphQLObjectType({
     name: "TDirector",
     fields: () => ({
         id: {type: GraphQLID},
         name: {type: GraphQLString},
         age: {type: GraphQLInt},
-    }),
-    movies:{
-        type: new GraphQLList(MovieType),
-        resolve(parent: TDirector){
-            //return Movies.find({directorId: parent.id})
+        movies: {
+            type: new GraphQLList(MovieType),
+            resolve(parent: TDirector) {
+                return Movies.find({directorId: parent.id})
+            }
         }
-    }
+    }),
+
 })
 
 const schema = new GraphQLSchema({
@@ -75,33 +65,28 @@ const schema = new GraphQLSchema({
                 type: MovieType,
                 args: {id: {type: GraphQLID}},
                 resolve(parent: TMovie, args: { id: string }) {
-                    // return movies.find(movie => movie.id == args.id)
-                    //return Movies.findById(args.id);
+                    return Movies.findById(args.id);
                 }
             },
             director: {
                 type: DirectorType,
                 args: {id: {type: GraphQLID}},
                 resolve(parent: TMovie, args: { id: string }) {
-                    // return directors.find(director => director.id == args.id)
-                    //return Movies.findById(args.id);
+                    return Movies.findById(args.id);
                 }
             },
             movies: {
                 type: new GraphQLList(MovieType), resolve() {
-                    // return movies;
-                    //return Movies.find({})
+                    return Movies.find({})
                 }
             },
             directors: {
                 type: new GraphQLList(DirectorType), resolve() {
-                    // return directors;
-                    //return Directors.find({})
+                    return Directors.find({})
                 }
             }
         },
     }),
 });
 
-
-module.exports = schema
+export default schema;
