@@ -7,6 +7,13 @@ import {ThemeProvider} from '@mui/material/styles';
 const client = new ApolloClient({
     uri: 'http://localhost:3003/graphql',
     cache: new InMemoryCache(),
+    defaultOptions:{
+        watchQuery: {
+            fetchPolicy: "cache-and-network",
+            // errorPolicy: "ignore",
+            notifyOnNetworkStatusChange: true
+        }
+    }
 });
 
 const App = () => {

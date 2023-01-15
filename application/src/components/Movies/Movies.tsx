@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client";
+
 import MoviesTable from "./MoviesTable";
 
 const Movies = () => {
