@@ -1,0 +1,39 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Mutation {
+    addDirector(age: Int!, name: String!): TDirector
+    addMovie(directorId: ID, genre: String!, name: String!, rating: Int, watched: Boolean!): TMovie
+    deleteDirector(id: ID): TDirector
+    deleteMovie(id: ID): TMovie
+    updateDirector(age: Int!, id: ID, name: String!): TDirector
+    updateMovie(directorId: ID, genre: String!, id: ID, name: String!, rating: Int, watched: Boolean!): TMovie
+}
+
+type Query {
+    director(id: ID): TDirector
+    directors: [TDirector]
+    movie(id: ID): TMovie
+    movies: [TMovie]
+}
+
+type TDirector {
+    age: Int
+    id: ID
+    movies: [TMovie]
+    name: String
+}
+
+type TMovie {
+    director: TDirector
+    genre: String!
+    id: ID
+    name: String!
+    rating: Int
+    test: String
+    watched: Boolean!
+}
