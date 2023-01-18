@@ -1,28 +1,28 @@
-import React from 'react';
-import Tabs from './components/Tabs/Tabs';
-import theme from './components/theme';
-import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
-import {ThemeProvider} from '@mui/material/styles';
+import React from "react";
+import Tabs from "./components/Tabs/Tabs";
+import theme from "./components/theme";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ThemeProvider } from "@mui/material/styles";
 
 const client = new ApolloClient({
-    uri: 'http://localhost:3003/graphql',
-    cache: new InMemoryCache(),
-    defaultOptions:{
-        watchQuery: {
-            fetchPolicy: "cache-and-network",
-            // errorPolicy: "ignore",
-            notifyOnNetworkStatusChange: true
-        }
-    }
+  uri: "http://localhost:3003/graphql",
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: "cache-and-network",
+    },
+  },
 });
 
 const App = () => {
-    return (
-        <ApolloProvider client={client}>
-            <ThemeProvider theme={theme}>
-                <Tabs/>
-            </ThemeProvider>
-        </ApolloProvider>
-    );
-}
+  return (
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <Tabs />
+      </ThemeProvider>
+    </ApolloProvider>
+  );
+};
 export default App;

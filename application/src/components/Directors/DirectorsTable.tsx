@@ -1,4 +1,4 @@
-import {useQuery} from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import {GET_DIRECTORS} from "./directorsQuery";
 import {CircularProgress} from "@mui/material";
 
@@ -9,14 +9,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {DELETE_DIRECTOR} from "./directorsMutations";
 
 
 const DirectorsTable = () => {
     const {data, error} = useQuery(GET_DIRECTORS);
     const directors = data?.directors || [];
+    const [deleteDirector] = useMutation(DELETE_DIRECTOR, {
+        refetchQueries: [{query: GET_DIRECTORS}],
+    });
 
     if (!data && !error) return <CircularProgress/>
-    if(error) return <>{error.message}</>
+    if (error) return <>{error.message}</>
     return (
 
         <TableContainer component={Paper}>
@@ -30,9 +34,9 @@ const DirectorsTable = () => {
                 </TableHead>
                 <TableBody>
                     {directors.map((row: any) => (
-                        <TableRow
-                            key={row.id}
-                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                        <TableRow onClick={() => deleteDirector({variables: {id: row.id}})}
+                                  key={row.id}
+                                  sx={{'&:last-child td, &:last-child th': {border: 0}}}
                         >
                             <TableCell component="th" scope="row">
                                 {row.name}

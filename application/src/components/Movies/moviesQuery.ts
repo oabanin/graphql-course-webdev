@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_MOVIES = gql`
-  query moviesQuery {
-    movies {
+  query moviesQuery($name: String) {
+    movies(name: $name) {
       id
       name
       genre
@@ -19,7 +19,6 @@ export const GET_DIRECTORS_LIST = gql`
   query directorsQuery {
     directors {
       id
-      name
     }
   }
 `;

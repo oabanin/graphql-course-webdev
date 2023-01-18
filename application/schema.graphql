@@ -18,7 +18,7 @@ type Query {
     director(id: ID): TDirector
     directors: [TDirector]
     movie(id: ID): TMovie
-    movies: [TMovie]
+    movies(name: String): [TMovie]
 }
 
 type TDirector {
@@ -34,6 +34,5 @@ type TMovie {
     id: ID
     name: String!
     rating: Int
-    test: String
     watched: Boolean!
 }
